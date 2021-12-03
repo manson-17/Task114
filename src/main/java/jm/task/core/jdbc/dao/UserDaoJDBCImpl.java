@@ -3,6 +3,7 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+import org.hibernate.Transaction;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    private static Connection connection = Util.getConnection();
+    private Connection connection = Util.getConnection();
 
     public UserDaoJDBCImpl() {
 
@@ -26,9 +27,8 @@ public class UserDaoJDBCImpl implements UserDao {
                 "age INT CHECK(age>0 AND age <128) " +
                 ") ";
         try (Statement statement = connection.createStatement()) {
-
             statement.executeUpdate(SQL);
-
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -36,9 +36,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
 
-        try (PreparedStatement preparedStatement =  connection.prepareStatement("DROP TABLE IF EXISTS Users")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("DROP TABLE IF EXISTS Users")) {
             preparedStatement.executeUpdate();
-
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,7 +54,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
             System.out.println("User с именем " + name + " добавлен в базу данных");
-
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -67,7 +67,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -88,7 +88,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
                 usersList.add(user);
             }
-
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -100,7 +100,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement("TRUNCATE TABLE Users")) {
             preparedStatement.executeUpdate();
-
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

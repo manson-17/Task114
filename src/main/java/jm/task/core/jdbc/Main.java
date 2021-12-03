@@ -1,7 +1,7 @@
 package jm.task.core.jdbc;
 
 
-import jm.task.core.jdbc.dao.UserDao;
+
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
 
@@ -18,6 +18,7 @@ public class Main {
     userService.removeUserById(3);
     System.out.println(userService.getAllUsers());
     userService.cleanUsersTable();
+    System.out.println(userService.getAllUsers());
    // userService.dropUsersTable();
     }
 }

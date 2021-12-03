@@ -16,9 +16,10 @@ public class Util {
         Connection connection = null;
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+        //    Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(connectionUrl, userName, password);
-        } catch (ClassNotFoundException | SQLException e ) {
+            connection.setAutoCommit(false);
+        } catch ( SQLException e ) {
             e.printStackTrace();
         }
         return connection;
