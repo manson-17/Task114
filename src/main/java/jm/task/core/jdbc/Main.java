@@ -10,6 +10,7 @@ public class Main {
 
     UserService userService = new UserServiceImpl();
 
+
     userService.createUsersTable();
     userService.saveUser("Max", "Cherenkov", (byte) 35);
     userService.saveUser("Vladimir", "DeMort", (byte) 65);
@@ -19,6 +20,6 @@ public class Main {
     System.out.println(userService.getAllUsers());
     userService.cleanUsersTable();
     System.out.println(userService.getAllUsers());
-   // userService.dropUsersTable();
+    userService.dropUsersTable();
     }
 }
