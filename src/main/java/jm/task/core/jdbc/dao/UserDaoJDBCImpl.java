@@ -5,6 +5,7 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.Transaction;
 
+import javax.persistence.Query;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +28,14 @@ public class UserDaoJDBCImpl implements UserDao {
                 "age INT CHECK(age>0 AND age <128) " +
                 ") ";
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(SQL);
+            statement.execute(SQL);
             connection.commit();
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
     }
@@ -39,15 +45,22 @@ public class UserDaoJDBCImpl implements UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement("DROP TABLE IF EXISTS Users")) {
             preparedStatement.executeUpdate();
             connection.commit();
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
 
+
         try (PreparedStatement preparedStatement =  connection.prepareStatement
                 ("INSERT INTO Users (name, lastName, age) VALUES (?, ?, ?);")) {
+
 
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
@@ -55,10 +68,15 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
             System.out.println("User с именем " + name + " добавлен в базу данных");
             connection.commit();
+
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
-
     }
 
     public void removeUserById(long id) {
@@ -69,6 +87,11 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
 
@@ -90,6 +113,11 @@ public class UserDaoJDBCImpl implements UserDao {
             }
             connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
 
@@ -102,6 +130,11 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
 
